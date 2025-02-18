@@ -1,6 +1,6 @@
 {
 	"name": "sveltedfire",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run prepack",
@@ -21,6 +21,10 @@
 		"!dist/**/*.test.*",
 		"!dist/**/*.spec.*"
 	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/cadetstar/sveltedfire.git"
+	},
 	"sideEffects": [
 		"**/*.css"
 	],
