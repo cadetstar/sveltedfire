@@ -4,9 +4,9 @@ export const fetchDoc = async (...docPath: Array<string>) => {
   const db = getFirestore()
   let theRef;
   if (docPath.length > 2) {
-    theRef = doc(collection(db, docPath[0], ...docPath.slice(1, -1)), docPath[-1])
+    theRef = doc(collection(db, docPath[0], ...docPath.slice(1, -1)), docPath.slice(-1)[0])
   } else {
-    theRef = doc(collection(db, docPath[0]), docPath[-1])
+    theRef = doc(collection(db, docPath[0]), docPath.slice(-1)[0])
   }
   const theDoc = await getDoc(theRef)
   if (!theDoc.exists()) {

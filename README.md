@@ -44,7 +44,16 @@ fetchDocs('pages')('public', '==', true) // fetch all public pages
 fetchDocs('pages')(and(where('published_at', '>=', '2025-01-01'), where('published_at', '<=', '2025-01-31'))) // fetch all pages published in the month of January
 ```
 
-In the case of both `fetchDoc` and `fetchDocs`, the documents are returned as bare objects with the ID field injected into both the `id` and `_id` fields. If your data already defines an `id` field, it will be returned as-is; the `_id` field will always reference the actual ID of the object.
+To listen for the snapshots of an object, use `listenDoc`. This takes the same parameters as `fetchDoc`, but returns a store. This should be used with rune syntax as below:
+```typescript
+const value = listenDoc('pages', 'tester')
+
+{#if $value}
+  {$value.name}
+{/if}
+```
+
+In the case of both `fetchDoc`, `fetchDocs`, and `listenDoc`, the documents are returned as bare objects with the ID field injected into both the `id` and `_id` fields. If your data already defines an `id` field, it will be returned as-is; the `_id` field will always reference the actual ID of the object.
 
 
 --------------
