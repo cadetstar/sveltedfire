@@ -9,7 +9,6 @@ export const listenDoc = (...docPath: Array<string>) => {
   } else {
     theRef = doc(collection(db, docPath[0]), docPath.slice(-1)[0])
   }
-  console.log(theRef)
   const theDoc = readable<null|DocumentData>(null, (set) => {
     const unsubscribe = onSnapshot(theRef, (val) => {
       if (!val.exists()) {

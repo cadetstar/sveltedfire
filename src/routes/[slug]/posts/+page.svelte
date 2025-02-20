@@ -4,7 +4,6 @@
 
   import { listenDoc } from '$lib';
   const val = listenDoc('pages', 'tester', 'posts', 'w4DvzffpU5UChIvuXoRd')
-  console.log('Value is', $val)
 </script>
 
 <h1>{data.page.name}</h1>

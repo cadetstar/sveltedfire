@@ -1,3 +1,4 @@
+import { getAuth } from "firebase/auth";
 import { getFirestore, collection, doc, getDoc } from "firebase/firestore"
 
 export const fetchDoc = async (...docPath: Array<string>) => {

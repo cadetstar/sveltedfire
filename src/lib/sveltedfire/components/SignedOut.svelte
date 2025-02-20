@@ -5,7 +5,6 @@
   const auth = getAuth()
   let user = $state(null)
   auth.onAuthStateChanged(u => {
-    console.log('User is', u)
     user = u
   })
 </script>
