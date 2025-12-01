@@ -1,0 +1,1 @@
+export const AUTH_CONTEXT_NAME = 'sveltedAuth'

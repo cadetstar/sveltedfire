@@ -1,14 +1,11 @@
 <script lang="ts">
   const { children } = $props()
-  import { getAuth } from 'firebase/auth'
+  import { getContext } from 'svelte';
+  import { AuthSig } from '../auth/AuthSig.js';
 
-  const auth = getAuth()
-  let user = $state(null)
-  auth.onAuthStateChanged(u => {
-    user = u
-  })
+  let fullAuth = getContext<AuthSig>('sveltedAuth')
 </script>
 
-{#if user}
+{#if fullAuth!.currentUser}
   {@render children()}
 {/if}

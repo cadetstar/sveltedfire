@@ -26,6 +26,18 @@ This guarantees that firebase has been initialized prior to any data loading cal
 
 ### Authentication
 
+In order to fully utilize the helper components sveltedfire contains, you must wrap your app at a high level with the `SveltedAuth` component. This initializes the firebase authentication system and provides a context that provides access to the current user. To access the auth context, use the `getAuthContext` helper. Additional keys can be injected onto the context by adding them as props on `SveltedAuth` with the prefix `extra_` and the value being a function that accepts user and token. This function will be called with user and token of null in the case of a logged out user to initialize default values. E.g., to add the key `claimLevel` to the sveltedAuth context:
+
+```svelte
+<script lang="ts">
+  import { SveltedAuth } from 'sveltedfire'
+</script>
+
+<SveltedAuth extra_claimLevel={(user, token) => token!.claims.level || ''}>
+  ...rest of application
+</SveltedAuth>
+```
+
 You can use the SignedIn/SignoutOut components to selectively render based on the user's authentication state. In addition, the `signOut` and `signInWithGoogle` helpers are available. Note that the signInWithGoogle automatically performs a signInWithPopup. If you would rather use signInWithRedirect, you will need to implement that manually.
 
 ### Fetching/Querying
@@ -37,11 +49,12 @@ fetchDoc('pages', params.slug)
 fetchDoc('pages', 'home', 'posts', params.postId)
 ```
 
-To perform a query for one or more documents, use the `fetchDocs` method. This is a double-invoked function. The first invocation sets the collection path. The second invocation accepts either three arguments (field name, comparator, value), no arguments for a simple collection fetch, or a single argument of an already formed QueryFieldFilterConstraint or a QueryCompositeFilterConstraint. E.g., 
+To perform a query for one or more documents, use the `fetchDocs` method. This is a double-invoked function. The first invocation sets the collection path. The second invocation accepts either a variable number of arguments. It accepts three arguments specifically for a simpler form of a where condition. Otherwise, you can pass one or more firestore constraints (where, limit, orderBy, startAt, endAt) and up to one composite filter (and, or)
 ```typescript
 fetchDocs('pages')() // fetch all pages
 fetchDocs('pages')('public', '==', true) // fetch all public pages
 fetchDocs('pages')(and(where('published_at', '>=', '2025-01-01'), where('published_at', '<=', '2025-01-31'))) // fetch all pages published in the month of January
+fetchDocs('pages')(where('public', '==', true), limit(10), orderBy('published_at', 'desc'))
 ```
 
 To listen for the snapshots of an object, use `listenDoc`. This takes the same parameters as `fetchDoc`, but returns a store. This should be used with rune syntax as below:

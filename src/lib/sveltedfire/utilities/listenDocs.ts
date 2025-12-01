@@ -1,8 +1,11 @@
-import { getFirestore, collection, doc, getDocs, Query, QueryFieldFilterConstraint, where, query, QueryCompositeFilterConstraint, type WhereFilterOp } from "firebase/firestore"
+import { getFirestore, collection, doc, getDocs, Query, QueryFieldFilterConstraint, where, query, QueryCompositeFilterConstraint, type WhereFilterOp, QueryConstraint, type QueryNonFilterConstraint, QueryOrderByConstraint, QueryLimitConstraint, QueryStartAtConstraint, QueryEndAtConstraint } from "firebase/firestore"
 import { onSnapshot, type DocumentData } from "firebase/firestore"
 import { readable } from 'svelte/store';
 
-export const listenDocs = (...collectionPath: Array<string>) => (qOrField: QueryCompositeFilterConstraint|string|null = null, comparator: string|null = null, value: string|boolean|number|null = null) => {
+type QueryFieldsType = QueryCompositeFilterConstraint|QueryFieldFilterConstraint|QueryNonFilterConstraint
+type TheFieldsType = string|QueryFieldsType|WhereFilterOp|number|boolean
+
+export const listenDocs = (...collectionPath: Array<string>) => (...fields: TheFieldsType[]) => {
   const db = getFirestore()
   let theRef;
   if (collectionPath.length > 1) {
@@ -11,14 +14,32 @@ export const listenDocs = (...collectionPath: Array<string>) => (qOrField: Query
     theRef = collection(db, collectionPath[0])
   }
   let theQuery = query(theRef);
-  if (qOrField) {
-    if (comparator) {
-      theQuery = query(theRef, where(qOrField as string, comparator as WhereFilterOp, value))
+  if (fields.length > 0) {
+    if ((fields.length === 3) && (typeof fields[1] === "string")) {
+      theQuery = query(theRef, where(fields[0] as string, fields[1] as WhereFilterOp, fields[2]))
     } else {
-      if (qOrField instanceof QueryFieldFilterConstraint) {
-        theQuery = query(theRef, qOrField as QueryFieldFilterConstraint)
-      } else if (qOrField instanceof QueryCompositeFilterConstraint) {
-        theQuery = query(theRef, qOrField as QueryCompositeFilterConstraint)
+      const builtFields: QueryConstraint[] = []
+      let compositeConstraint = null
+      fields.forEach(k => {
+        if (k instanceof QueryCompositeFilterConstraint) {
+          compositeConstraint = k as QueryCompositeFilterConstraint
+        } else if (k instanceof QueryFieldFilterConstraint) {
+          builtFields.push(k as QueryFieldFilterConstraint)
+        } else if (k instanceof QueryOrderByConstraint) {
+          builtFields.push(k as QueryOrderByConstraint)
+        } else if (k instanceof QueryLimitConstraint) {
+          builtFields.push(k as QueryLimitConstraint)
+        } else if (k instanceof QueryStartAtConstraint) {
+          builtFields.push(k as QueryStartAtConstraint)
+        } else if (k instanceof QueryEndAtConstraint) {
+          builtFields.push(k as QueryEndAtConstraint)
+        }
+      })
+
+      if (compositeConstraint) {
+        theQuery = query(theRef, compositeConstraint, ...builtFields)
+      } else {
+        theQuery = query(theRef, ...builtFields)
       }
     }
   }
