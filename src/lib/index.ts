@@ -5,6 +5,7 @@ export { fetchDocs } from './sveltedfire/utilities/fetchDocs.js'
 export { signInWithGoogle } from './sveltedfire/auth/signInWithGoogle.js'
 export { signOut } from './sveltedfire/auth/signOut.js'
 export { listenDoc } from './sveltedfire/utilities/listenDoc.js'
+export { listenDocs } from './sveltedfire/utilities/listenDocs.js'
 export { kindlyFetchDoc } from './sveltedfire/utilities/kindlyFetchDoc.js'
 export { kindlyFetchDocs } from './sveltedfire/utilities/kindlyFetchDocs.js'
 
