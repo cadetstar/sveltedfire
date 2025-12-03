@@ -10,6 +10,7 @@ export { kindlyFetchDoc } from './sveltedfire/utilities/kindlyFetchDoc.js'
 export { kindlyFetchDocs } from './sveltedfire/utilities/kindlyFetchDocs.js'
 export { type AuthSig } from './sveltedfire/auth/AuthSig.js'
 export { getAuthContext } from './sveltedfire/auth/getAuthContext.js'
+export { handleForm } from './sveltedfire/utilities/handleForm.js'
 
 import SignedIn from './sveltedfire/components/SignedIn.svelte'
 import SignedOut from './sveltedfire/components/SignedOut.svelte'
