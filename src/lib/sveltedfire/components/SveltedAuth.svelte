@@ -11,7 +11,7 @@
   let additionalKeys: {[k: string]: any} = {}
   Object.keys(rest).forEach(k => {
     if (k.startsWith('extra_')) {
-      const actualKey = k.replace('^extra_', '')
+      const actualKey = k.replace(new RegExp('^extra_'), '')
       additionalKeys[actualKey] = k
     }
   })
