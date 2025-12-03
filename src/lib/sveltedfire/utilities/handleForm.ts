@@ -2,7 +2,7 @@ import { getFirestore, collection, doc, getDoc, updateDoc, setDoc, addDoc, delet
 
 export const handleForm = (
   { collectionName, docId = null, docIdField = null, onSubmit, beforeSubmit = null}: 
-  { collectionName: string, docId: null|string, docIdField: null|string, onSubmit: any, beforeSubmit: any}
+  { collectionName: string, docId?: null|string, docIdField?: null|string, onSubmit: any, beforeSubmit?: any}
 ) => async (ev: SubmitEvent) => {
   const db = getFirestore()
   
@@ -47,5 +47,4 @@ export const handleForm = (
     docRefId = docRef.id
   }
   onSubmit(docRefId)
-
 }
