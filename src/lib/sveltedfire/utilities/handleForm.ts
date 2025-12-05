@@ -34,7 +34,7 @@ export const handleForm = (
       while (components.length) {
         const nextOne = components.shift()
         if (!(nextOne! in mover)) {
-          if (!components) {
+          if (!components.length) {
             if (objData[k] === '_deleteme_') {
               mover[nextOne!] = deleteField()
             } else {
