@@ -20,16 +20,37 @@ export const handleForm = (
         objData[k] = deleteField()
       }
     }
-    let matcher = k.match(/^(.*)\[(.*)\]$/)
-    if (matcher) {
-      if (!(matcher[1] in objData)) {
-        objData[matcher[1]] = []
-      }
-      if (objData[k] === '_deleteme_') {
-        console.log('Deletion override')
-        objData[matcher[1]] = deleteField()
+    const parseKey = (key: string): string[] => {
+      let matcher = key.match(/^(.*)\[(.*?)\]+$/)
+      console.log(matcher)
+      if (matcher) {
+        return [...parseKey(matcher[1]), matcher[2]]
       } else {
-        objData[matcher[1]][parseInt(matcher[2], 10)] = objData[k]
+        return [key]
+      }
+    }
+    const components = parseKey(k)
+    console.log('Components are', components)
+    if (components.length > 1) {
+      let mover = objData
+      while (components.length) {
+        const nextOne = components.shift()
+        if (!(nextOne! in mover)) {
+          if (!components) {
+            if (objData[k] === '_deleteme_') {
+              mover[nextOne!] = deleteField()
+            } else {
+              mover[nextOne!] = objData[k]
+            }
+          } else {
+            if (isNaN(parseInt(components[0]))) {
+              mover[nextOne!] = {}
+            } else {
+              mover[nextOne!] = []
+            }
+          }
+        }
+        mover = mover[nextOne!]
       }
       delete objData[k]
     }
