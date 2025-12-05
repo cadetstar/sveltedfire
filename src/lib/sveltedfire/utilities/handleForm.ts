@@ -53,6 +53,16 @@ export const handleForm = (
       delete objData[k]
     }
   })
+  const cleanArrays = (obj: any) => {
+    if (Array.isArray(obj)) {
+      obj = obj.filter(k => k !== deleteField())
+    } else {
+      Object.keys(obj).forEach(k => {
+        cleanArrays(obj[k])
+      })
+    }
+  }
+  cleanArrays(objData)
   console.log('Object data is', objData)
   let docRefId
   if (docId) {
