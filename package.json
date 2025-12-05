@@ -1,6 +1,6 @@
 {
 	"name": "sveltedfire",
-	"version": "0.1.11",
+	"version": "0.1.12",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run prepack",

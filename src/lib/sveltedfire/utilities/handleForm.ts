@@ -56,14 +56,15 @@ export const handleForm = (
   const isLiteralObject = (a: any) => (!!a) && (a.constructor === Object)
   const cleanArrays = (obj: any) => {
     if (Array.isArray(obj)) {
-      obj = obj.filter(k => k !== deleteField())
+      return obj.filter(k => k !== deleteField())
     } else {
       if (isLiteralObject(obj)) {
         Object.keys(obj).forEach(k => {
-          cleanArrays(obj[k])
+          obj[k] = cleanArrays(obj[k])
         })
       }
     }
+    return obj
   }
   cleanArrays(objData)
   console.log('Object data is', objData)
