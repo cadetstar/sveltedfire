@@ -12,7 +12,7 @@ export const handleForm = (
   let col = collection(db, collectionName)
   let objData: {[k:string]: any} = Object.fromEntries(formData.entries())
   if (beforeSubmit) {
-    objData = beforeSubmit(objData, ev)
+    objData = await beforeSubmit(objData, ev)
   }
   Object.keys(objData).forEach(k => {
     if (objData[k] === '_deleteme_') {
@@ -21,8 +21,7 @@ export const handleForm = (
       }
     }
     const parseKey = (key: string): string[] => {
-      let matcher = key.match(/^(.*)\[(.*?)\]+$/)
-      console.log(matcher)
+      let matcher = key.match(/^(.*)\[(.*?)\]$/)
       if (matcher) {
         return [...parseKey(matcher[1]), matcher[2]]
       } else {
@@ -30,7 +29,6 @@ export const handleForm = (
       }
     }
     const components = parseKey(k)
-    console.log('Components are', components)
     if (components.length > 1) {
       let mover = objData
       while (components.length) {
